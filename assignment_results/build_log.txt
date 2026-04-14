@@ -1,0 +1,48 @@
+Build command:
+module load nvhpc
+nvc++ -fast -mp cfd_euler.cpp -o cfd_euler_cpu
+nvc++ -fast -mp=gpu -gpu=cc80 -Minfo=accel,mp cfd_euler.cpp -o cfd_euler_gpu
+
+Relevant NVHPC OpenMP offload messages:
+idx(int, int, int):
+     37, Generating implicit omp declare target routine
+         Generating NVIDIA GPU code
+pressure(double, double, double, double):
+     41, Generating implicit omp declare target routine
+         Generating NVIDIA GPU code
+fluxX(double, double, double, double, double*, double*, double*, double*):
+     49, Generating implicit omp declare target routine
+         Generating NVIDIA GPU code
+fluxY(double, double, double, double, double*, double*, double*, double*):
+     59, Generating implicit omp declare target routine
+         Generating NVIDIA GPU code
+apply_cpu_boundary_conditions(...):
+    114, #omp parallel
+    127, #omp parallel
+update_cpu(...):
+    148, #omp parallel
+    187, #omp parallel
+    199, #omp parallel
+        199, Generating reduction(+:total_kinetic)
+run_gpu(...):
+    246, #omp target teams distribute parallel for
+        246, Generating GPU kernel
+        248, Loop parallelized across teams and threads(128), schedule(static)
+    258, #omp target teams distribute parallel for
+        258, Generating GPU kernel
+        261, Loop parallelized across teams and threads(128), schedule(static)
+    271, #omp target teams distribute parallel for
+        271, Generating GPU kernel
+        274, Loop parallelized across teams and threads(128), schedule(static)
+    309, #omp target teams distribute parallel for
+        309, Generating GPU kernel
+        312, Loop parallelized across teams and threads(128), schedule(static)
+    324, #omp target teams distribute parallel for
+        245, Generating map(alloc:E_new[:total_size],rho_new[:total_size],rhou_new[:total_size])
+             Generating map(tofrom:rho[:total_size],rhou[:total_size],rhov[:total_size],E[:total_size])
+             Generating map(to:solid[:total_size])
+             Generating map(alloc:rhov_new[:total_size])
+        324, Generating GPU kernel
+             Loop parallelized across teams and threads(128), schedule(static)
+             Generating reduction(+:total_kinetic)
+    324, Generating map(tofrom:total_kinetic)

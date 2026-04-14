@@ -26,13 +26,20 @@
 
 CC       = nvc++
 CCFLAGS = -fast -mp
+GPUFLAGS = -mp=gpu -gpu=cc80 -Minfo=accel,mp
 
-BIN =  laplace2d
+BIN =  laplace2d cfd_euler_cpu cfd_euler_gpu
 
 all: $(BIN)
 
 laplace2d: laplace2d.cpp Makefile
 	$(CC) $(CCFLAGS) -o $@ laplace2d.cpp
+
+cfd_euler_cpu: cfd_euler.cpp Makefile
+	$(CC) $(CCFLAGS) -o $@ cfd_euler.cpp
+
+cfd_euler_gpu: cfd_euler.cpp Makefile
+	$(CC) -fast $(GPUFLAGS) -o $@ cfd_euler.cpp
 
 clean:
 	$(RM) $(BIN)

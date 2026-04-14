@@ -1,0 +1,3 @@
+Running gpu Nx=200 Ny=100 steps=2000
+backend,Nx,Ny,nSteps,runtime_seconds,total_kinetic
+gpu,200,100,2000,0.537264,7748.702397778225
